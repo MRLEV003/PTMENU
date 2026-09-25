@@ -9,6 +9,7 @@ LICENSE = "LICENSE : GPL"
 R = 4
 PW = 4
 IC = 0
+LTS = "LTS_2.5 (BETA)"
 
 username = "user"
 paswod = "1234"
@@ -23,13 +24,6 @@ import platform
 import webbrowser
 def v():
     os.system('cls' if os.name == 'nt' else 'clear')
-
-
-def link(url):
-    print("Opening WEB GITHUB for Update...")
-    time.sleep(2)
-    webbrowser.open(url)
-    print("TIME FOR UPDATE!")
 
 name = "Unknown-User"
 
@@ -400,36 +394,23 @@ while True:
     print(f"{RED}nnn                 tttt  tttt")
     print(f"{RED}nnn        {DE}MENU{RED}      tttttttt{DE}")
     print(" ====================================")
-    print(f"=- WELCOME TO PTMENU [{Version}] -=")
+    print(f"=- WELCOME TO PTMENU [{Version}-{LTS}] -=")
     print(" ====================================")
     print("[E] EXIT")
     print("1/B. use Btop+")
-    print("2/D. UPDATE -github-")
-    print("3/W. write[.txt]")
+    print("2/W. write[.txt]")
     print("3/N. NEWS ABOUT THIS PROJECT")
-    print("5/S. SYSTEM CHECK")
-    print("6/C. CALCULATOR")
-    print("7/T. TEXT EDITOR")
+    print("4/S. SYSTEM CHECK")
+    print("5/C. CALCULATOR")
+    print("6/T. TEXT EDITOR")
     print("[A] ADVANCED OPTIONS")
     cho = input(" SELECT :  ")
 
     if cho == "1" or cho.upper() == "B":
         v()
         btop()
-
-    elif cho == "2" or cho.upper() == "D":
-        v()
-        lk = "https://github.com/HASLY95/PTMENU"
-        link(lk)
-        while True:
-            print("BACK TO MENU")
-            aww = input("[Y/n]:  ")
-            if aww.upper() == "Y":
-                break
-            else:
-                print("\n ")
         
-    elif cho == "3" or cho.upper() == "W":
+    elif cho == "2" or cho.upper() == "W":
 
         while True:
             v()
@@ -472,7 +453,7 @@ while True:
 
         v()
 
-    elif cho == "4" or cho.upper() == "N":
+    elif cho == "3" or cho.upper() == "N":
         print(NEWS)
         print(f"VERSION >> {Version}")
         print(f"LICENSE >> {LICENSE}")
@@ -484,15 +465,15 @@ while True:
             else:
                 print("\n")
 
-    elif cho == "5" or cho.upper() == "S":
+    elif cho == "4" or cho.upper() == "S":
         v()
         check_system()
 
-    elif cho == "6" or cho.upper() == "C":
+    elif cho == "5" or cho.upper() == "C":
         v()
         cclt()
 
-    elif cho == "7" or cho.upper() == "T":
+    elif cho == "6" or cho.upper() == "T":
         v()
         text_editor()
 

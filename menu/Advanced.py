@@ -13,6 +13,7 @@ import hashlib
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 Version = "Release : v.2.5"
+LTS = "LTS_2.5 (BETA)"
 
 import socket
 import time
@@ -41,7 +42,7 @@ def pas():
 
     def incorrect():
         nonlocal R
-        print("Name or Password is incorrect try again")
+        print("Name or Password is LTSincorrect try again")
         R -= 1
         print(f"You have {R} time.")
         if R == 0:
@@ -71,7 +72,10 @@ def pas():
             print("\n " * 80)
             break
 
-print("\n " * 80)
+def v():
+    os.system('cls' if os.name == "nt" else 'clear')
+
+v()
 print("//===================---+")
 print("||MENU 2 OPTION... =")
 print("\\===============--..")
@@ -83,9 +87,6 @@ if chos == "1":
     pas()
 else:
     exit()
-
-def v():
-    print("\n "* 80)
 
 # -------- Internet Test Functions --------
 
@@ -150,7 +151,7 @@ def _test_ping(host="1.1.1.1", samples=8):
     return round(sum(times) / len(times), 1)
 
 def _test_download(duration=5, threads=4):
-    url = "https://speed.cloudflare.com/__down?bytes=25000000"  # 25MB per request, worker วนซ้ำเองถ้าหมดก่อน
+    url = "https://speed.cloudflare.com/__down?bytes=25000000"
     stop_event = threading.Event()
     start = time.monotonic()
     with ThreadPoolExecutor(max_workers=threads) as pool:
@@ -281,7 +282,7 @@ def file_hash_check():
 while True:
     v()
     print("+ +--================================")
-    print(f"--== >> Advanced MENU [{Version}]")
+    print(f"--== >> Advanced MENU [{Version}-{LTS}]")
     print("  > --===========================")
     print("[L] MY local  IP ")
     print("[P] MY public IP ")

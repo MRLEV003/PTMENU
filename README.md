@@ -1,4 +1,4 @@
-# PTMENU
+# PTMENU-LTS
 The ultimate Python system suite for New Users: Monitor, Manage, and Log with ease.
 
 # STANDARD INFO >>
@@ -23,4 +23,5 @@ LINUX :
 AND NOW YOU CAN RUN!!! 
 
 need support?
+This is indeed an LTS version, but it is still considered a BETA because we are unable to provide support 24/7. We apologize for the inconvenience.
 Discord - 2xDVqcAS8c

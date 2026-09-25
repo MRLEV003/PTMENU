@@ -3,7 +3,7 @@
 
 NEWS ="The Main system Menu Beta v.0.1 is out now for open source!! \n BETA 0.4 update What's new? \n BETA 0.4 add the TXT and.. We called it [WRITE txt] \n BETA 0.7 delete the [ area and circumference of circle ] option from menu 2. After it's here in the menu2 and BETA 0.6 just 5 days. \n This product will reach End of Life on [May 5 2027] \n BIG update and support >> \n github Sep 5 2026 \n github Oct 5 2026 \n github Dec 26 2026 \n github Feb 28 2027 \n github May 1 2027"
 
-Version = "BETA    : 2.4.3"
+Version = "Release    : 2.5"
 LICENSE = "LICENSE : GPL"
 
 R = 4
@@ -214,6 +214,172 @@ def wwork(wwwftxtW):
     with open("txt/WORKS-list.txt", "a") as file:
         file.write(f"{wwwftxtW}\n")
 
+
+def read_text_file(path):
+    """Try a list of common encodings so as many text file types as possible open OK."""
+    encodings = ["utf-8", "utf-8-sig", "tis-620", "cp874", "latin-1"]
+    if not os.path.isfile(path):
+        return None, None
+    for enc in encodings:
+        try:
+            with open(path, "r", encoding=enc) as f:
+                return f.readlines(), enc
+        except UnicodeDecodeError:
+            continue
+        except Exception as e:
+            print(f"ERROR opening file: {e}")
+            return None, None
+    return None, None
+
+
+def text_editor():
+    v()
+    print("=" * 40)
+    print("   BUILT-IN TEXT EDITOR")
+    print("=" * 40)
+    print("Works with any text-based file: .txt .py .md .json .csv")
+    print(".log .ini .cfg .html .css .js .xml .yaml .sh and more")
+    print("=" * 40)
+
+    while True:
+        path = input("FILE PATH (or 'B' to go back) >> ").strip()
+        if path.upper() == "B":
+            return
+        if path == "":
+            print("Path can't be empty.\n")
+            continue
+        break
+
+    lines, enc = read_text_file(path)
+
+    if lines is None and not os.path.isfile(path):
+        print(f"'{path}' doesn't exist yet.")
+        mk = input("CREATE NEW FILE? [y/N] >> ")
+        if mk.upper() != "Y":
+            return
+        lines = []
+        enc = "utf-8"
+    elif lines is None:
+        print("Could not open this file (unsupported/binary encoding).")
+        time.sleep(1.5)
+        return
+    else:
+        print(f"Opened '{path}' ({len(lines)} lines, encoding: {enc})")
+
+    dirty = False
+
+    def show():
+        print("-" * 40)
+        if not lines:
+            print("(empty file)")
+        for i, ln in enumerate(lines, 1):
+            print(f"{i:>4} | {ln.rstrip(chr(10))}")
+        print("-" * 40)
+
+    while True:
+        print("\n[V] VIEW    [A] APPEND LINE   [I] INSERT LINE")
+        print("[E] EDIT LINE   [D] DELETE LINE   [F] FIND TEXT")
+        print("[S] SAVE    [SA] SAVE AS   [Q] QUIT EDITOR")
+        act = input("EDITOR >> ").strip().upper()
+
+        if act == "V":
+            show()
+
+        elif act == "A":
+            newln = input("TEXT >> ")
+            lines.append(newln + "\n")
+            dirty = True
+            print("Added.")
+
+        elif act == "I":
+            show()
+            try:
+                pos = int(input("INSERT AT LINE # >> "))
+            except ValueError:
+                print("Invalid number.")
+                continue
+            newln = input("TEXT >> ")
+            idx = max(0, min(pos - 1, len(lines)))
+            lines.insert(idx, newln + "\n")
+            dirty = True
+            print("Inserted.")
+
+        elif act == "E":
+            show()
+            try:
+                pos = int(input("EDIT LINE # >> "))
+            except ValueError:
+                print("Invalid number.")
+                continue
+            if 1 <= pos <= len(lines):
+                newln = input("NEW TEXT >> ")
+                lines[pos - 1] = newln + "\n"
+                dirty = True
+                print("Updated.")
+            else:
+                print("Out of range.")
+
+        elif act == "D":
+            show()
+            try:
+                pos = int(input("DELETE LINE # >> "))
+            except ValueError:
+                print("Invalid number.")
+                continue
+            if 1 <= pos <= len(lines):
+                removed = lines.pop(pos - 1)
+                dirty = True
+                print(f"Deleted: {removed.rstrip(chr(10))}")
+            else:
+                print("Out of range.")
+
+        elif act == "F":
+            term = input("FIND >> ")
+            found = [(i, ln) for i, ln in enumerate(lines, 1) if term in ln]
+            if not found:
+                print("Not found.")
+            else:
+                for i, ln in found:
+                    print(f"{i:>4} | {ln.rstrip(chr(10))}")
+
+        elif act == "S":
+            try:
+                with open(path, "w", encoding=enc) as f:
+                    f.writelines(lines)
+                dirty = False
+                print(f"Saved to '{path}'.")
+                usedcclt(name, f"TEXT EDITOR SAVE - {path}")
+            except Exception as e:
+                print(f"ERROR saving: {e}")
+
+        elif act == "SA":
+            newpath = input("SAVE AS (new path) >> ").strip()
+            if newpath:
+                try:
+                    with open(newpath, "w", encoding=enc) as f:
+                        f.writelines(lines)
+                    print(f"Saved to '{newpath}'.")
+                    usedcclt(name, f"TEXT EDITOR SAVE AS - {newpath}")
+                    path = newpath
+                    dirty = False
+                except Exception as e:
+                    print(f"ERROR saving: {e}")
+
+        elif act == "Q":
+            if dirty:
+                cf = input("Unsaved changes. Quit anyway? [y/N] >> ")
+                if cf.upper() != "Y":
+                    continue
+            print("Closing editor...")
+            time.sleep(0.5)
+            return
+        else:
+            print("Unknown command.")
+
+def btop():
+    os.system('btop')
+
+
 RED = "\033[31m"
 GREEN = "\033[32m"
 YELLOW = "\033[33m"
@@ -237,23 +403,21 @@ while True:
     print(f"=- WELCOME TO PTMENU [{Version}] -=")
     print(" ====================================")
     print("[E] EXIT")
-    print("1. check_system")
-    print("2. calculator")
-    print("3. UPDATE -github-")
-    print("4. write[.txt]")
-    print("5. NEWS ABOUT THIS PROJECT")
+    print("1/B. use Btop+")
+    print("2/D. UPDATE -github-")
+    print("3/W. write[.txt]")
+    print("3/N. NEWS ABOUT THIS PROJECT")
+    print("5/S. SYSTEM CHECK")
+    print("6/C. CALCULATOR")
+    print("7/T. TEXT EDITOR")
     print("[A] ADVANCED OPTIONS")
     cho = input(" SELECT :  ")
 
-    if cho == "1":
+    if cho == "1" or cho.upper() == "B":
         v()
-        check_system()
+        btop()
 
-    elif cho == "2":
-        v()
-        cclt()
-
-    elif cho == "3":
+    elif cho == "2" or cho.upper() == "D":
         v()
         lk = "https://github.com/HASLY95/PTMENU"
         link(lk)
@@ -265,12 +429,13 @@ while True:
             else:
                 print("\n ")
         
-    elif cho == "4":
+    elif cho == "3" or cho.upper() == "W":
 
         while True:
             v()
             print("1 DIARY")
             print("2 WORKS")
+            print("R READ")
             print("3 EXIT")
             wwtxt = input("SELECT :  ")
 
@@ -307,7 +472,7 @@ while True:
 
         v()
 
-    elif cho == "5":
+    elif cho == "4" or cho.upper() == "N":
         print(NEWS)
         print(f"VERSION >> {Version}")
         print(f"LICENSE >> {LICENSE}")
@@ -318,6 +483,18 @@ while True:
                 break
             else:
                 print("\n")
+
+    elif cho == "5" or cho.upper() == "S":
+        v()
+        check_system()
+
+    elif cho == "6" or cho.upper() == "C":
+        v()
+        cclt()
+
+    elif cho == "7" or cho.upper() == "T":
+        v()
+        text_editor()
 
     elif cho.upper() == "A":
         v()

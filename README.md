@@ -14,15 +14,13 @@ YOU NEED TO INSTALL THE "PSUTIL"
 
 LINUX :
 
-- REDHAT / FEDORA based : sudo dnf install python3-psutil python3-requests
+- REDHAT / FEDORA based : sudo dnf install python3-psutil python3-requests btop
 
-- Ubuntu / Debian based >>  [1] : sudo apt update [2] : sudo apt install python3-psutil [3] sudo apt install python3-requests
+- Ubuntu / Debian based >>  [1] : sudo apt update [2] : sudo apt install python3-psutil [3] sudo apt install python3-requests [4] sudo apt install btop
 
-- Archlinux based >> sudo pacman -S python-psutil python-requests
-
-- MACOS/Windows >> [1]pip install psutil [2] pip install requests
+- Archlinux based >> sudo pacman -S python-psutil python-requests btop
 
 AND NOW YOU CAN RUN!!! 
 
 need support?
-DISCORD - j2HCACWe9W
+Discord - 2xDVqcAS8c

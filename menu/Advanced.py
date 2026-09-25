@@ -9,9 +9,10 @@ import webbrowser
 import socket
 import requests
 import threading
+import hashlib
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-Version = "BETA : v.2.4.3"
+Version = "Release : v.2.5"
 
 import socket
 import time
@@ -55,7 +56,7 @@ def pas():
 
     while R > 0:
         name = input("NAME : ")
-        password = input("PASSWORD : ")
+        password = getpass.getpass("PASSWORD : ")
 
         if name != user_name:
             incorrect()
@@ -221,6 +222,60 @@ def run_internet_test():
     print("EXIT with any key")
     input(">> ")
 
+# -------- File Integrity / Hash Checker (security feature) --------
+
+def file_hash_check():
+    v()
+    print("=" * 40)
+    print("   FILE INTEGRITY / HASH CHECKER")
+    print("=" * 40)
+    print("Computes MD5 / SHA1 / SHA256 of a file so you can")
+    print("verify it wasn't corrupted or tampered with.")
+    print("=" * 40)
+
+    path = input("FILE PATH >> ").strip()
+    if not os.path.isfile(path):
+        print("File not found.")
+        time.sleep(1.5)
+        return
+
+    start_time = time.perf_counter()
+    md5 = hashlib.md5()
+    sha1 = hashlib.sha1()
+    sha256 = hashlib.sha256()
+    try:
+        with open(path, "rb") as f:
+            for chunk in iter(lambda: f.read(65536), b""):
+                md5.update(chunk)
+                sha1.update(chunk)
+                sha256.update(chunk)
+    except Exception as e:
+        print(f"ERROR reading file: {e}")
+        time.sleep(1.5)
+        return
+    elapsed_time = time.perf_counter() - start_time
+
+    print(f"FILE      : {path}")
+    print(f"MD5       : {md5.hexdigest()}")
+    print(f"SHA1      : {sha1.hexdigest()}")
+    print(f"SHA256    : {sha256.hexdigest()}")
+    print(f"[Execution Time: {elapsed_time:.4f} sec ({elapsed_time*1000:.2f} ms)]")
+
+    compare = input("COMPARE WITH A KNOWN HASH? paste it or press Enter to skip >> ").strip().lower()
+    if compare:
+        if compare in (md5.hexdigest(), sha1.hexdigest(), sha256.hexdigest()):
+            print("RESULT >> MATCH! File integrity looks OK.")
+        else:
+            print("RESULT >> NO MATCH! File may be corrupted or modified.")
+
+    with open("logs/advanced_logs.txt", "a") as file:
+        current_time = time.ctime()
+        file.write(f"[{current_time}] User: {user_name} | ROOT status: FILE HASH CHECK on {path} | Time taken: {elapsed_time:.4f} sec ({elapsed_time*1000:.2f} ms) | >>MENU [2]-\n")
+
+    print("EXIT with any key")
+    input(">> ")
+
+
 # -------- Main Menu Loop --------
 
 while True:
@@ -231,6 +286,7 @@ while True:
     print("[L] MY local  IP ")
     print("[P] MY public IP ")
     print("[T] INTERNET SPEED TEST")
+    print("[H] FILE INTEGRITY CHECKER (HASH)")
     print("[E] EXIT")
 
     choo = input("SELECT : ")
@@ -292,6 +348,9 @@ while True:
 
     elif choo.upper() == "T":
         run_internet_test()
+
+    elif choo.upper() == "H":
+        file_hash_check()
 
     elif choo.upper() == "E":
         exit()
